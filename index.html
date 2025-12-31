@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokyo Train Transfer & Conversation Practice</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="container">
+            <h1 class="title">🚆 Tokyo Train Transfer Guide</h1>
+            <h2 class="subtitle">& English Conversation Practice</h2>
+            <p class="description">Learn how to transfer trains and practice English conversations!</p>
+            <p class="description-jp">電車の乗り換えと英会話を学ぼう！</p>
+            
+            <div class="menu-buttons">
+                <button class="menu-btn" onclick="showScreen('route-finder-screen')">
+                    <i class="fas fa-route"></i>
+                    <span>Route Finder</span>
+                    <span class="jp-text">乗り換え案内</span>
+                </button>
+                
+                <button class="menu-btn conversation-btn" onclick="showScreen('conversation-screen')">
+                    <i class="fas fa-comments"></i>
+                    <span>Conversation Practice</span>
+                    <span class="jp-text">会話練習</span>
+                </button>
+                
+                <button class="menu-btn" onclick="showScreen('vocabulary-screen')">
+                    <i class="fas fa-book"></i>
+                    <span>Railway Vocabulary</span>
+                    <span class="jp-text">鉄道用語集</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation Practice Screen -->
+    <div id="conversation-screen" class="screen">
+        <div class="container">
+            <button class="back-btn" onclick="showScreen('welcome-screen')">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            
+            <h1 class="screen-title">💬 Conversation Practice</h1>
+            <p class="screen-subtitle">Practice asking for directions in English!</p>
+            
+            <div class="conversation-menu">
+                <h2>Choose a Scenario / シナリオを選んでください</h2>
+                
+                <div class="scenario-card" onclick="startConversation(1)">
+                    <div class="scenario-number">Scenario 1</div>
+                    <div class="scenario-title">Basic Question</div>
+                    <div class="scenario-title-jp">基本的な質問</div>
+                    <div class="scenario-preview">
+                        "Could you tell me how to get to Asakusa?"
+                    </div>
+                    <div class="scenario-stats">
+                        <span><i class="fas fa-comments"></i> 2 lines</span>
+                        <span><i class="fas fa-clock"></i> 1 min</span>
+                    </div>
+                </div>
+                
+                <div class="scenario-card" onclick="startConversation(2)">
+                    <div class="scenario-number">Scenario 2</div>
+                    <div class="scenario-title">Polite Conversation</div>
+                    <div class="scenario-title-jp">丁寧な会話</div>
+                    <div class="scenario-preview">
+                        "Excuse me. Could you tell me...?"
+                    </div>
+                    <div class="scenario-stats">
+                        <span><i class="fas fa-comments"></i> 3 lines</span>
+                        <span><i class="fas fa-clock"></i> 2 min</span>
+                    </div>
+                </div>
+                
+                <div class="scenario-card" onclick="startConversation(3)">
+                    <div class="scenario-number">Scenario 3</div>
+                    <div class="scenario-title">Transfer Route</div>
+                    <div class="scenario-title-jp">乗り換えルート</div>
+                    <div class="scenario-preview">
+                        "Which line should I take from Ueno?"
+                    </div>
+                    <div class="scenario-stats">
+                        <span><i class="fas fa-comments"></i> 4 lines</span>
+                        <span><i class="fas fa-clock"></i> 3 min</span>
+                    </div>
+                </div>
+                
+                <div class="scenario-card" onclick="startConversation(4)">
+                    <div class="scenario-number">Scenario 4</div>
+                    <div class="scenario-title">Complete Polite Transfer</div>
+                    <div class="scenario-title-jp">完全な丁寧な乗り換え会話</div>
+                    <div class="scenario-preview">
+                        "Excuse me... Which line... Thank you"
+                    </div>
+                    <div class="scenario-stats">
+                        <span><i class="fas fa-comments"></i> 5 lines</span>
+                        <span><i class="fas fa-clock"></i> 4 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversation Practice Dialogue Screen -->
+    <div id="dialogue-screen" class="screen">
+        <div class="container">
+            <button class="back-btn" onclick="showScreen('conversation-screen')">
+                <i class="fas fa-arrow-left"></i> Back to Scenarios
+            </button>
+            
+            <div class="dialogue-header">
+                <h1 id="dialogue-title" class="screen-title"></h1>
+                <div id="dialogue-progress" class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            
+            <div id="step-indicator" class="step-indicator"></div>
+            
+            <div id="dialogue-container" class="dialogue-container">
+                <!-- Dialogue boxes will be inserted here -->
+            </div>
+            
+            <div class="dialogue-controls">
+                <button id="play-audio-btn" class="control-btn audio-btn" onclick="playCurrentAudio()">
+                    <i class="fas fa-volume-up"></i> Play Audio
+                </button>
+                <button id="next-btn" class="control-btn next-btn" onclick="showNextDialogue()">
+                    Next <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <div id="vocabulary-highlight" class="vocabulary-box">
+                <h3>📚 Key Vocabulary / 重要な語彙</h3>
+                <div id="vocabulary-list"></div>
+            </div>
+            
+            <div class="practice-options">
+                <button class="practice-btn" onclick="startPracticeMode('multiple-choice')">
+                    <i class="fas fa-check-circle"></i> Multiple Choice Quiz
+                </button>
+                <button class="practice-btn" onclick="startPracticeMode('fill-blank')">
+                    <i class="fas fa-keyboard"></i> Fill in the Blank
+                </button>
+                <button class="practice-btn" onclick="startPracticeMode('role-play')">
+                    <i class="fas fa-users"></i> Role Play Mode
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practice Mode Screen -->
+    <div id="practice-screen" class="screen">
+        <div class="container">
+            <button class="back-btn" onclick="backToDialogue()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            
+            <h1 id="practice-title" class="screen-title"></h1>
+            
+            <div id="practice-container" class="practice-container">
+                <!-- Practice exercises will be inserted here -->
+            </div>
+            
+            <div class="practice-controls">
+                <button id="check-answer-btn" class="control-btn" onclick="checkAnswer()">
+                    Check Answer
+                </button>
+                <button id="next-question-btn" class="control-btn" onclick="nextQuestion()" style="display:none;">
+                    Next Question
+                </button>
+            </div>
+            
+            <div id="practice-result" class="practice-result"></div>
+        </div>
+    </div>
+
+    <!-- Route Finder Screen (Original functionality) -->
+    <div id="route-finder-screen" class="screen">
+        <div class="container">
+            <button class="back-btn" onclick="showScreen('welcome-screen')">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            
+            <h1 class="screen-title">🗺️ Find Your Route</h1>
+            
+            <div class="selection-container">
+                <div class="selection-box">
+                    <h3>🚉 From<br><small style="font-size: 0.75em; font-weight: normal; color: #666;">出発地（しゅっぱつち）</small></h3>
+                    <div id="from-location" class="selected-location">Not selected</div>
+                </div>
+                <div class="arrow-icon"><i class="fas fa-arrow-right"></i></div>
+                <div class="selection-box">
+                    <h3>🎯 To<br><small style="font-size: 0.75em; font-weight: normal; color: #666;">目的地（もくてきち）</small></h3>
+                    <div id="to-location" class="selected-location">Not selected</div>
+                </div>
+            </div>
+            
+            <div id="locations-grid" class="locations-grid">
+                <!-- Location cards will be inserted here -->
+            </div>
+            
+            <button id="find-route-btn" class="find-route-btn" onclick="findRoute()" disabled>
+                Find Route
+            </button>
+            
+            <div id="route-result" class="route-result"></div>
+        </div>
+    </div>
+
+    <!-- Vocabulary Screen -->
+    <div id="vocabulary-screen" class="screen">
+        <div class="container">
+            <button class="back-btn" onclick="showScreen('welcome-screen')">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            
+            <h1 class="screen-title">📚 Railway Vocabulary</h1>
+            
+            <div id="vocabulary-grid" class="vocabulary-grid">
+                <!-- Vocabulary cards will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/conversation.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
